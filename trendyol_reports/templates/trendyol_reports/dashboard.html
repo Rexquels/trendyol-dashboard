@@ -731,6 +731,35 @@
         }
 
 
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .user-name {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .logout-button {
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #374151;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background: #f8fafc;
+        }
+
         /* ==================================================
            EMPTY
            ================================================== */
@@ -864,12 +893,35 @@
         </div>
 
 
-        <a
-            href="{% url 'create_report' %}"
-            class="button"
-        >
-            + Yeni Hafta Ekle
-        </a>
+        <div class="user-area">
+
+            <span class="user-name">
+                👤 {{ request.user.username }}
+            </span>
+
+            <a
+                href="{% url 'create_report' %}"
+                class="button"
+            >
+                + Yeni Hafta Ekle
+            </a>
+
+            <form
+                method="post"
+                action="{% url 'logout' %}"
+                style="display: inline; margin: 0;"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="logout-button"
+                >
+                    Çıkış Yap
+                </button>
+            </form>
+
+        </div>
 
     </div>
 

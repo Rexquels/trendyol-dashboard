@@ -2,6 +2,7 @@ import json
 from decimal import Decimal
 
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .models import WeeklyReport
 from .forms import WeeklyReportForm
@@ -139,6 +140,7 @@ def build_sparkline(
 # DASHBOARD
 # ============================================================
 
+@login_required
 def dashboard(request):
 
     # --------------------------------------------------------
@@ -805,6 +807,7 @@ def dashboard(request):
 # YENİ HAFTA EKLE
 # ============================================================
 
+@login_required
 def create_report(request):
 
     if request.method == "POST":
