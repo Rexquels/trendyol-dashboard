@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Trendyol Operasyon Dashboard</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: #f4f6f8;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: #172033;
+        }
+
+
+        .container {
+
+            max-width: 1600px;
+
+            margin: auto;
+
+            padding: 30px;
+        }
+
+
+        /* ==================================================
+           HEADER
+           ================================================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 28px;
+        }
+
+
+        .header p {
+
+            color: #697386;
+
+            margin-top: 8px;
+        }
+
+
+        .button {
+
+            display: inline-block;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+        }
+
+
+        .button:hover {
+
+            background: #1f2937;
+        }
+
+
+        /* ==================================================
+           SUMMARY
+           ================================================== */
+
+        .summary {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .summary-card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .summary-title {
+
+            color: #697386;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .summary-value {
+
+            font-size: 25px;
+
+            font-weight: 700;
+        }
+
+
+        .summary-week {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-top: 8px;
+        }
+
+
+        /* ==================================================
+           SECTIONS
+           ================================================== */
+
+        .section {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 22px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 3px 15px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .section-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .section-header h2 {
+
+            margin: 0;
+
+            font-size: 19px;
+        }
+
+
+        .table-wrapper {
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse:
+                collapse;
+        }
+
+
+        th {
+
+            text-align: right;
+
+            padding: 12px;
+
+            background: #f8fafc;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        th:first-child {
+
+            text-align: left;
+
+            min-width: 280px;
+        }
+
+
+        th:last-child {
+
+            min-width: 215px;
+        }
+
+
+        td {
+
+            padding: 13px 12px;
+
+            border-bottom:
+                1px solid #edf0f4;
+
+            text-align: right;
+
+            white-space: nowrap;
+
+            vertical-align: middle;
+        }
+
+
+        td:first-child {
+
+            text-align: left;
+
+            font-weight: 600;
+        }
+
+
+        tbody tr:last-child td {
+
+            border-bottom: none;
+        }
+
+
+        /* ==================================================
+           CHANGE
+           ================================================== */
+
+        .change {
+
+            font-weight: 700;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 4px;
+
+            min-width: 58px;
+
+            justify-content: center;
+
+            padding: 5px 8px;
+
+            border-radius: 999px;
+        }
+
+
+        .positive {
+
+            color: #15803d;
+
+            background: #f0fdf4;
+        }
+
+
+        .negative {
+
+            color: #dc2626;
+
+            background: #fef2f2;
+        }
+
+
+        .neutral {
+
+            color: #64748b;
+        }
+
+
+        /* ==================================================
+           TREND
+           ================================================== */
+
+        .trend-cell {
+
+            width: 215px;
+
+            min-width: 215px;
+
+            padding-left: 14px;
+
+            padding-right: 0;
+        }
+
+
+        .trend-box {
+
+            width: 195px;
+
+            height: 62px;
+
+            border:
+                1px solid #eef2f7;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    #fbfdff 0%,
+                    #f8fafc 100%
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+
+        .sparkline {
+
+            width: 182px;
+
+            height: 54px;
+
+            overflow: visible;
+        }
+
+
+        .sparkline .grid-line {
+
+            stroke: #e9eef5;
+
+            stroke-width: 0.8;
+
+            stroke-dasharray: 2 3;
+        }
+
+
+        .sparkline .area {
+
+            opacity: 0.12;
+        }
+
+
+        .sparkline .line {
+
+            fill: none;
+
+            stroke-width: 2.7;
+
+            stroke-linecap: round;
+
+            stroke-linejoin: round;
+        }
+
+
+        .sparkline .point {
+
+            stroke-width: 2;
+        }
+
+
+        .sparkline .last-point {
+
+            stroke: white;
+
+            stroke-width: 2;
+        }
+
+
+        .trend-box.positive {
+
+            color: #16a34a;
+
+            background: #f7fff9;
+
+            border-color: #dcfce7;
+        }
+
+
+        .trend-box.negative {
+
+            color: #dc2626;
+
+            background: #fff8f8;
+
+            border-color: #fee2e2;
+        }
+
+
+        .trend-box.neutral {
+
+            color: #64748b;
+        }
+
+
+        .trend-box .line,
+        .trend-box .last-point {
+
+            stroke:
+                currentColor;
+        }
+
+
+        .trend-box .point {
+
+            fill:
+                currentColor;
+        }
+
+
+        .trend-box .area {
+
+            fill:
+                currentColor;
+        }
+
+
+        /* ==================================================
+           FORMULA
+           ================================================== */
+
+        .formula-note {
+
+            margin-top: 5px;
+
+            font-size: 11px;
+
+            color: #94a3b8;
+
+            font-weight: 400;
+        }
+
+
+        /* ==================================================
+           OPERASYON KARAR MERKEZİ
+           ================================================== */
+
+        .decision-center {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            margin-top: 30px;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                0 3px 15px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .decision-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .decision-header h2 {
+
+            margin: 0;
+
+            font-size: 21px;
+        }
+
+
+        .decision-header p {
+
+            margin: 6px 0 0;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        .score-card {
+
+            min-width: 130px;
+
+            padding: 15px 20px;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            background: #f8fafc;
+        }
+
+
+        .score-number {
+
+            font-size: 30px;
+
+            font-weight: 800;
+        }
+
+
+        .score-label {
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            margin-top: 3px;
+        }
+
+
+        .analysis-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .analysis-column {
+
+            border:
+                1px solid #edf0f4;
+
+            border-radius: 13px;
+
+            padding: 18px;
+
+            background: #fcfdff;
+        }
+
+
+        .analysis-column h3 {
+
+            margin: 0 0 15px;
+
+            font-size: 15px;
+        }
+
+
+        .analysis-item {
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background: white;
+
+            border:
+                1px solid #edf0f4;
+
+            margin-bottom: 10px;
+        }
+
+
+        .analysis-item:last-child {
+
+            margin-bottom: 0;
+        }
+
+
+        .analysis-item strong {
+
+            display: block;
+
+            font-size: 13px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .analysis-item p {
+
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .action-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+
+        .action-item {
+
+            padding: 13px;
+
+            background: white;
+
+            border:
+                1px solid #edf0f4;
+
+            border-radius: 10px;
+        }
+
+
+        .action-priority {
+
+            display: inline-block;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            padding: 4px 7px;
+
+            border-radius: 999px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .priority-high {
+
+            color: #b91c1c;
+
+            background: #fee2e2;
+        }
+
+
+        .priority-medium {
+
+            color: #a16207;
+
+            background: #fef9c3;
+        }
+
+
+        .priority-low {
+
+            color: #166534;
+
+            background: #dcfce7;
+        }
+
+
+        .action-item p {
+
+            margin: 0;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            color: #475569;
+        }
+
+
+        .empty-analysis {
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+            padding: 10px 0;
+        }
+
+
+        /* ==================================================
+           EMPTY
+           ================================================== */
+
+        .empty {
+
+            text-align: center;
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 60px;
+
+            color: #64748b;
+        }
+
+
+        .empty h2 {
+
+            color: #172033;
+        }
+
+
+        /* ==================================================
+           RESPONSIVE
+           ================================================== */
+
+        @media (max-width: 1100px) {
+
+            .analysis-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .summary {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+
+        @media (max-width: 1000px) {
+
+            .container {
+
+                padding: 15px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .summary {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .header {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+
+                gap: 15px;
+            }
+
+
+            .decision-header {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- ==================================================
+         HEADER
+         ================================================== -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                Trendyol Operasyon Dashboard
+            </h1>
+
+
+            {% if latest %}
+
+                <p>
+
+                    Son veri:
+
+                    <strong>
+                        {{ latest.year }}
+                        -
+                        {{ latest.week }}. Hafta
+                    </strong>
+
+                </p>
+
+            {% else %}
+
+                <p>
+                    Henüz haftalık veri girilmedi.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <a
+            href="{% url 'create_report' %}"
+            class="button"
+        >
+            + Yeni Hafta Ekle
+        </a>
+
+    </div>
+
+
+    {% if latest %}
+
+
+        <!-- ==================================================
+             SUMMARY
+             ================================================== -->
+
+        <div class="summary">
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Haftalık Brüt Ciro
+                </div>
+
+                <div class="summary-value">
+
+                    ₺{{ latest.gross_revenue|floatformat:0 }}
+
+                </div>
+
+                <div class="summary-week">
+
+                    {{ latest.week }}. Hafta
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Brüt Satış Adedi
+                </div>
+
+                <div class="summary-value">
+
+                    {{ latest.gross_sales_quantity }}
+
+                </div>
+
+                <div class="summary-week">
+
+                    {{ latest.week }}. Hafta
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Toplam Görüntülenme
+                </div>
+
+                <div class="summary-value">
+
+                    {{ latest.total_views }}
+
+                </div>
+
+                <div class="summary-week">
+
+                    {{ latest.week }}. Hafta
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Satışa Dönüş Oranı
+                </div>
+
+                <div class="summary-value">
+
+                    {{ latest.sales_conversion_rate|floatformat:2 }}%
+
+                </div>
+
+                <div class="summary-week">
+
+                    Brüt Sipariş /
+                    Toplam Görüntülenme
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ==================================================
+             KPI SECTIONS
+             ================================================== -->
+
+        {% for section in dashboard_sections %}
+
+
+            <div class="section">
+
+
+                <div class="section-header">
+
+                    <span
+                        style="font-size: 23px;"
+                    >
+                        {{ section.icon }}
+                    </span>
+
+                    <h2>
+                        {{ section.title }}
+                    </h2>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+
+                    <table>
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    KPI
+                                </th>
+
+
+                                <!-- ==================================
+                                     İADE HAFTALARI
+                                     ================================== -->
+
+                                {% if section.title == "İADE" %}
+
+                                    {% for report in return_reports reversed %}
+
+                                        <th>
+                                            {{ report.week }}. Hafta
+                                        </th>
+
+                                    {% endfor %}
+
+
+                                {% else %}
+
+
+                                    {% for report in reports reversed %}
+
+                                        <th>
+                                            {{ report.week }}. Hafta
+                                        </th>
+
+                                    {% endfor %}
+
+
+                                {% endif %}
+
+
+                                <th>
+                                    Değişim
+                                </th>
+
+
+                                <th>
+                                    Trend
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            {% for metric in section.metrics %}
+
+
+                                <tr>
+
+
+                                    <td>
+
+                                        {{ metric.label }}
+
+
+                                        {% if metric.label == "Satışa Dönüş Oranı" %}
+
+                                            <div class="formula-note">
+
+                                                Brüt Sipariş /
+                                                Toplam Görüntülenme
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    {% for value in metric.display_values %}
+
+                                        <td>
+                                            {{ value }}
+                                        </td>
+
+                                    {% endfor %}
+
+
+                                    <td>
+
+
+                                        {% if metric.change is not None %}
+
+
+                                            <span
+                                                class="change
+
+                                                {% if metric.change > 0 %}
+
+                                                    positive
+
+                                                {% elif metric.change < 0 %}
+
+                                                    negative
+
+                                                {% else %}
+
+                                                    neutral
+
+                                                {% endif %}
+
+                                                "
+                                            >
+
+
+                                                {% if metric.change > 0 %}
+
+                                                    ↑
+
+                                                {% elif metric.change < 0 %}
+
+                                                    ↓
+
+                                                {% else %}
+
+                                                    →
+
+                                                {% endif %}
+
+
+                                                {{ metric.change|floatformat:0 }}%
+
+                                            </span>
+
+
+                                        {% else %}
+
+                                            <span class="neutral">
+                                                —
+                                            </span>
+
+                                        {% endif %}
+
+
+                                    </td>
+
+
+                                    <td
+                                        class="trend-cell"
+                                    >
+
+
+                                        {% if metric.sparkline %}
+
+
+                                            <div
+                                                class="trend-box {{ metric.trend_class }}"
+                                                title="{{ metric.label }}"
+                                            >
+
+
+                                                <svg
+                                                    class="sparkline"
+                                                    viewBox="0 0 170 50"
+                                                    preserveAspectRatio="none"
+                                                >
+
+
+                                                    <line
+                                                        class="grid-line"
+                                                        x1="6"
+                                                        y1="25"
+                                                        x2="164"
+                                                        y2="25"
+                                                    ></line>
+
+
+                                                    <polygon
+                                                        class="area"
+                                                        points="
+                                                            {{ metric.sparkline }}
+                                                            164,44
+                                                            6,44
+                                                        "
+                                                    ></polygon>
+
+
+                                                    <polyline
+                                                        class="line"
+                                                        points="{{ metric.sparkline }}"
+                                                    ></polyline>
+
+
+                                                    {% if metric.values|length > 1 %}
+
+                                                        <circle
+                                                            class="point"
+                                                            cx="6"
+                                                            cy="25"
+                                                            r="2.3"
+                                                        ></circle>
+
+                                                    {% endif %}
+
+
+                                                    <circle
+                                                        class="last-point"
+                                                        cx="{{ metric.last_x }}"
+                                                        cy="{{ metric.last_y }}"
+                                                        r="4.2"
+                                                        fill="currentColor"
+                                                    ></circle>
+
+
+                                                </svg>
+
+
+                                            </div>
+
+
+                                        {% else %}
+
+                                            <span class="neutral">
+                                                —
+                                            </span>
+
+                                        {% endif %}
+
+
+                                    </td>
+
+
+                                </tr>
+
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+        <!-- ==================================================
+             OPERASYON KARAR MERKEZİ
+             ================================================== -->
+
+        {% if analysis %}
+
+
+            <div class="decision-center">
+
+
+                <div class="decision-header">
+
+
+                    <div>
+
+                        <h2>
+                            🧠 Operasyon Karar Merkezi
+                        </h2>
+
+                        <p>
+
+                            Son haftanın operasyonel
+                            verilerinden otomatik oluşturulan
+                            bulgular ve aksiyonlar.
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="score-card">
+
+                        <div class="score-number">
+
+                            {{ analysis.score }}
+
+                        </div>
+
+                        <div class="score-label">
+
+                            OPERASYON SKORU
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="analysis-grid">
+
+
+                    <!-- ==========================================
+                         RİSKLER / BULGULAR
+                         ========================================== -->
+
+                    <div class="analysis-column">
+
+
+                        <h3>
+                            🔴 Riskler / Bulgular
+                        </h3>
+
+
+                        {% if analysis.findings %}
+
+
+                            {% for finding in analysis.findings %}
+
+
+                                <div class="analysis-item">
+
+
+                                    <strong>
+                                        {{ finding.title }}
+                                    </strong>
+
+
+                                    <p>
+                                        {{ finding.message }}
+                                    </p>
+
+
+                                </div>
+
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <div class="empty-analysis">
+
+                                Bu dönemde kritik
+                                bir bulgu bulunmadı.
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <!-- ==========================================
+                         FIRSATLAR
+                         ========================================== -->
+
+                    <div class="analysis-column">
+
+
+                        <h3>
+                            🟢 Fırsatlar
+                        </h3>
+
+
+                        {% if analysis.opportunities %}
+
+
+                            {% for opportunity in analysis.opportunities %}
+
+
+                                <div class="analysis-item">
+
+
+                                    <strong>
+                                        {{ opportunity.title }}
+                                    </strong>
+
+
+                                    <p>
+                                        {{ opportunity.message }}
+                                    </p>
+
+
+                                </div>
+
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <div class="empty-analysis">
+
+                                Şu an belirgin bir
+                                fırsat sinyali bulunmuyor.
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <!-- ==========================================
+                         AKSİYONLAR
+                         ========================================== -->
+
+                    <div class="analysis-column">
+
+
+                        <h3>
+                            🎯 Önerilen Aksiyonlar
+                        </h3>
+
+
+                        {% if analysis.actions %}
+
+
+                            <div class="action-list">
+
+
+                                {% for action in analysis.actions %}
+
+
+                                    <div class="action-item">
+
+
+                                        {% if action.priority == "high" %}
+
+                                            <span
+                                                class="action-priority priority-high"
+                                            >
+                                                YÜKSEK ÖNCELİK
+                                            </span>
+
+
+                                        {% elif action.priority == "medium" %}
+
+                                            <span
+                                                class="action-priority priority-medium"
+                                            >
+                                                ORTA ÖNCELİK
+                                            </span>
+
+
+                                        {% else %}
+
+                                            <span
+                                                class="action-priority priority-low"
+                                            >
+                                                DÜŞÜK ÖNCELİK
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        <p>
+                                            {{ action.action }}
+                                        </p>
+
+
+                                    </div>
+
+
+                                {% endfor %}
+
+
+                            </div>
+
+
+                        {% else %}
+
+
+                            <div class="empty-analysis">
+
+                                Şu an için önerilen
+                                bir aksiyon bulunmuyor.
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    {% else %}
+
+
+        <!-- ==================================================
+             EMPTY
+             ================================================== -->
+
+        <div class="empty">
+
+
+            <h2>
+                Henüz haftalık rapor bulunmuyor.
+            </h2>
+
+
+            <p>
+
+                İlk haftalık raporu girerek
+                dashboard'u başlatabilirsin.
+
+            </p>
+
+
+            <br>
+
+
+            <a
+                href="{% url 'create_report' %}"
+                class="button"
+            >
+
+                İlk Haftayı Ekle
+
+            </a>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

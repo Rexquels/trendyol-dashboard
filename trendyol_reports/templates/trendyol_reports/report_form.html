@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Yeni Haftalık Rapor</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f6fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #374151;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 12px;
+        }
+
+        .save {
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        @media(max-width: 800px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>
+            Yeni Haftalık Rapor
+        </h1>
+
+        <a
+            href="/"
+            class="back"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <div class="section">
+
+            <h2>
+                Hafta Bilgisi
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Yıl
+                    </label>
+
+                    {{ form.year }}
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Hafta
+                    </label>
+
+                    {{ form.week }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Satış / Operasyon
+            </h2>
+
+            <div class="grid">
+
+                {% for field in form %}
+
+                    {% if field.name in "gross_revenue gross_sales_quantity average_commission_rate unavailable_product_count delivery_time" %}
+
+                    <div class="field">
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <div class="error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Ürün / Trafik
+            </h2>
+
+            <div class="grid">
+
+                {% for field in form %}
+
+                    {% if field.name in "active_product_stock active_model_count total_views seller_views add_to_cart_count gross_order_count follower_count" %}
+
+                    <div class="field">
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Ürün Reklamları
+            </h2>
+
+            <div class="grid">
+
+                {% for field in form %}
+
+                    {% if field.name in "product_ad_revenue product_ad_spend product_ad_impressions product_ad_clicks" %}
+
+                    <div class="field">
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Meta Reklamları
+            </h2>
+
+            <div class="grid">
+
+                {% for field in form %}
+
+                    {% if field.name in "meta_ad_revenue meta_ad_spend meta_ad_impressions meta_ad_clicks" %}
+
+                    <div class="field">
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                İptal / İade
+            </h2>
+
+            <div class="grid">
+
+                {% for field in form %}
+
+                    {% if field.name in "cancellation_count cancellation_lost_revenue return_count return_lost_revenue" %}
+
+                    <div class="field">
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Kampanya
+            </h2>
+
+            <div class="grid">
+
+                {% for field in form %}
+
+                    {% if field.name in "commission_stock_count three_star_stock_count two_star_stock_count one_star_stock_count campaign_stock_count commission_model_count three_star_model_count two_star_model_count one_star_model_count campaign_model_count commission_revenue three_star_revenue campaign_revenue coupon_stock_count coupon_model_count coupon_revenue" %}
+
+                    <div class="field">
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="save"
+        >
+            Raporu Kaydet
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+</body>
+
+</html>
